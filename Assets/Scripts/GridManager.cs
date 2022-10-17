@@ -7,6 +7,7 @@ public class GridManager : MonoBehaviour
     public Camera cam;
 
     public Tilemap arrowTileMap;
+    public Tilemap collisionTileMap;
     public Tile arrowTilePrefab;
     public Tile selectedTile;
     public LayerMask tileLayerMask;
@@ -16,6 +17,7 @@ public class GridManager : MonoBehaviour
     public Vector2 endPosition;
 
     public float dragDistance;
+    public Coroutine moveDownwordsCoroutine;
 
     private void OnEnable()
     {
@@ -31,7 +33,6 @@ public class GridManager : MonoBehaviour
     private void Start()
     {
         var cellPosition = arrowTileMap.WorldToCell(transform.position);
-        Instantiate(arrowTilePrefab, cellPosition + new Vector3(0.5f, 0.5f), Quaternion.identity);
     }
 
     private void OnClickStarted(CallbackContext ctx)
@@ -44,11 +45,16 @@ public class GridManager : MonoBehaviour
         if (tile == null) return;
 
         selectedTile = tile;
+        if (moveDownwordsCoroutine != null)
+            StopCoroutine(moveDownwordsCoroutine);
+
         startPosition = cam.ScreenToWorldPoint(input.Player.Position.ReadValue<Vector2>());
     }
 
     private void OnClickCanceled(CallbackContext obj)
     {
+        if (selectedTile == null) return;
+        moveDownwordsCoroutine = StartCoroutine(selectedTile.MoveDownward(arrowTileMap, collisionTileMap, selectedTile == null));
         selectedTile = null;
     }
 
@@ -63,15 +69,13 @@ public class GridManager : MonoBehaviour
         if (draggedDistance.x < -dragDistance)
         {
             var cellPosition = arrowTileMap.WorldToCell(selectedTile.transform.position + new Vector3(-1, 0));
-            if (!arrowTileMap.HasTile(cellPosition)) return;
-            selectedTile.Move(cellPosition);
+            selectedTile.Move(cellPosition, arrowTileMap, collisionTileMap);
             startPosition = endPosition;
         }
         else if (draggedDistance.x > dragDistance)
         {
             var cellPosition = arrowTileMap.WorldToCell(selectedTile.transform.position + new Vector3(1, 0));
-            if (!arrowTileMap.HasTile(cellPosition)) return;
-            selectedTile.Move(cellPosition);
+            selectedTile.Move(cellPosition, arrowTileMap, collisionTileMap);
             startPosition = endPosition;
         }
     }
