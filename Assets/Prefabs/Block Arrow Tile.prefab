@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -8699765562515777859}
   - component: {fileID: 173466351966743674}
   m_Layer: 3
-  m_Name: Tile
+  m_Name: Block Arrow Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

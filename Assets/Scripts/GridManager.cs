@@ -6,8 +6,9 @@ public class GridManager : MonoBehaviour
 {
     public Camera cam;
 
-    public Tilemap arrowTileMap;
+    public Tilemap blockMovingTileMap;
     public Tilemap collisionTileMap;
+    public Tilemap blockArrowTileMap;
     public Tile arrowTilePrefab;
     public Tile selectedTile;
     public LayerMask tileLayerMask;
@@ -32,7 +33,7 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        var cellPosition = arrowTileMap.WorldToCell(transform.position);
+        var cellPosition = blockMovingTileMap.WorldToCell(transform.position);
     }
 
     private void OnClickStarted(CallbackContext ctx)
@@ -54,7 +55,6 @@ public class GridManager : MonoBehaviour
     private void OnClickCanceled(CallbackContext obj)
     {
         if (selectedTile == null) return;
-        moveDownwordsCoroutine = StartCoroutine(selectedTile.MoveDownward(arrowTileMap, collisionTileMap, selectedTile == null));
         selectedTile = null;
     }
 
@@ -68,14 +68,14 @@ public class GridManager : MonoBehaviour
 
         if (draggedDistance.x < -dragDistance)
         {
-            var cellPosition = arrowTileMap.WorldToCell(selectedTile.transform.position + new Vector3(-1, 0));
-            selectedTile.Move(cellPosition, arrowTileMap, collisionTileMap);
+            var cellPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(-1, 0));
+            selectedTile.Move(cellPosition, blockMovingTileMap, collisionTileMap, blockArrowTileMap);
             startPosition = endPosition;
         }
         else if (draggedDistance.x > dragDistance)
         {
-            var cellPosition = arrowTileMap.WorldToCell(selectedTile.transform.position + new Vector3(1, 0));
-            selectedTile.Move(cellPosition, arrowTileMap, collisionTileMap);
+            var cellPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(1, 0));
+            selectedTile.Move(cellPosition, blockMovingTileMap, collisionTileMap, blockArrowTileMap);
             startPosition = endPosition;
         }
     }
