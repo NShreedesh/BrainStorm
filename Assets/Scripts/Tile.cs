@@ -6,40 +6,43 @@ public class Tile : MonoBehaviour
 {
     private GridManager gridManager;
 
-    private void Start()
+    private void Awake()
     {
         gridManager = GetComponentInParent<GridManager>();
-        StartCoroutine(MoveDownward(gridManager.blockMovingTileMap, gridManager.collisionTileMap, gridManager.blockArrowTileMap));
+    }
+    private void Start()
+    {
+        StartCoroutine(MoveDownward());
     }
 
-    public void Move(Vector3Int cellPosition, Tilemap arrowTileMap, Tilemap collisionTileMap, Tilemap blockArrowTileMap)
+    public void Move(Vector3Int cellPosition)
     {
-        if (!IsValidMove(cellPosition, arrowTileMap, collisionTileMap, blockArrowTileMap)) return;
+        if (!IsValidMove(cellPosition)) return;
         transform.position = cellPosition + new Vector3(0.5f, 0.5f);
     }
 
-    public IEnumerator MoveDownward(Tilemap arrowTileMap, Tilemap collisionTileMap, Tilemap blockArrowTileMap)
+    public IEnumerator MoveDownward()
     {
         while (true)
         {
-            var cellPosition = arrowTileMap.WorldToCell(transform.position + new Vector3(0, -1));
-            if (arrowTileMap.HasTile(cellPosition))
+            var cellPosition = gridManager.blockMovingTileMap.WorldToCell(transform.position + new Vector3(0, -1));
+            if (gridManager.blockMovingTileMap.HasTile(cellPosition))
             {
-                Move(cellPosition, arrowTileMap, collisionTileMap, blockArrowTileMap);
+                Move(cellPosition);
                 yield return new WaitForSeconds(0.3f);
             }
             yield return null;
         }
     }
 
-    public bool IsValidMove(Vector3Int cellPosition, Tilemap arrowTileMap, Tilemap collsionTileMap, Tilemap blockArrowTileMap)
+    public bool IsValidMove(Vector3Int cellPosition)
     {
-        if (!arrowTileMap.HasTile(cellPosition)) return false;
-        if (collsionTileMap.HasTile(cellPosition)) return false;
+        if (!gridManager.blockMovingTileMap.HasTile(cellPosition)) return false;
+        if (gridManager.collisionTileMap.HasTile(cellPosition)) return false;
 
-        for (int i = 0; i < blockArrowTileMap.transform.childCount; i++)
+        for (int i = 0; i < gridManager.blockArrowTileMap.transform.childCount; i++)
         {
-            if (blockArrowTileMap.WorldToCell(blockArrowTileMap.transform.GetChild(i).transform.position) == cellPosition)
+            if (gridManager.blockArrowTileMap.WorldToCell(gridManager.blockArrowTileMap.transform.GetChild(i).transform.position) == cellPosition)
             {
                 return false;
             }

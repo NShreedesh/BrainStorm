@@ -69,13 +69,25 @@ public class GridManager : MonoBehaviour
         if (draggedDistance.x < -dragDistance)
         {
             var cellPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(-1, 0));
-            selectedTile.Move(cellPosition, blockMovingTileMap, collisionTileMap, blockArrowTileMap);
+            var cellDownPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(0, -1));
+            if (!collisionTileMap.HasTile(cellDownPosition) && blockMovingTileMap.HasTile(cellDownPosition))
+            {
+                selectedTile = null;
+                return;
+            }
+            selectedTile.Move(cellPosition);
             startPosition = endPosition;
         }
         else if (draggedDistance.x > dragDistance)
         {
             var cellPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(1, 0));
-            selectedTile.Move(cellPosition, blockMovingTileMap, collisionTileMap, blockArrowTileMap);
+            var cellDownPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(0, -1));
+            if (!collisionTileMap.HasTile(cellDownPosition) && blockMovingTileMap.HasTile(cellDownPosition))
+            {
+                selectedTile = null;
+                return;
+            }
+            selectedTile.Move(cellPosition);
             startPosition = endPosition;
         }
     }
