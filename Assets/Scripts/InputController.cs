@@ -10,7 +10,7 @@ public class InputController : MonoBehaviour
     public Vector2 Position { get; private set; }
 
     public Action OnClickStartedAction;
-    public Action OnClickPerformedAction;
+    public Action OnPositionChangedAction;
     public Action OnClickCanceledAction;
 
     private void OnEnable()
@@ -39,7 +39,7 @@ public class InputController : MonoBehaviour
     private void OnPositionChanged(InputAction.CallbackContext obj)
     {
         Position = obj.ReadValue<Vector2>();
-        OnClickPerformedAction?.Invoke();
+        OnPositionChangedAction?.Invoke();
     }
 
     private void OnDisable()

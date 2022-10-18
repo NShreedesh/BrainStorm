@@ -4,23 +4,6 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class GridManager : MonoBehaviour
 {
-    [Header("Camera")]
-    [SerializeField]
-    private Camera cam;
-
-    [Header("TileMaps")]
-    [SerializeField]
-    public Tilemap blockMovingTileMap;
-    public Tilemap collisionTileMap;
-    public Tilemap blockArrowTileMap;
-    public Tilemap arrowTileMap;
-    public Tile arrowTilePrefab;
-    public Tile selectedTile;
-    public LayerMask tileLayerMask;
-
-    [Header("Sprites")]
-    public Sprite upArrowSrpite;
-    public Sprite leftArrowSrpite;
 
     [Header("Input")]
     [SerializeField]
@@ -32,17 +15,38 @@ public class GridManager : MonoBehaviour
     private Vector2 startPosition;
     private Vector2 endPosition;
 
+    [Header("Camera")]
+    [SerializeField]
+    private Camera cam;
+
+    [Header("TileMaps")]
+    [SerializeField]
+    public Tilemap blockMovingTileMap;
+    public Tilemap collisionTileMap;
+    public Tilemap blockArrowTileMap;
+    public Tilemap arrowTileMap;
+
+    [Header("Tiles")]
+    public Tile arrowTilePrefab;
+    public LayerMask tileLayerMask;
+    private Tile selectedTile;
+
+    [Header("Sprites")]
+    public Sprite upArrowSrpite;
+    public Sprite leftArrowSrpite;
+
     private void OnEnable()
     {
         inputController.OnClickStartedAction += OnClickStarted;
-        inputController.OnClickPerformedAction += OnClickPerformed;
         inputController.OnClickCanceledAction += OnClickCanceled;
+        inputController.OnPositionChangedAction += SwipeControl;
     }
+
     private void OnDisable()
     {
         inputController.OnClickStartedAction -= OnClickStarted;
-        inputController.OnClickPerformedAction -= OnClickPerformed;
         inputController.OnClickCanceledAction -= OnClickCanceled;
+        inputController.OnPositionChangedAction -= SwipeControl;
     }
 
     private void OnClickStarted()
@@ -64,7 +68,7 @@ public class GridManager : MonoBehaviour
         selectedTile = null;
     }
 
-    private void OnClickPerformed()
+    private void SwipeControl()
     {
         if (!inputController.IsPressed) return;
         if (selectedTile == null) return;
