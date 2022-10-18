@@ -282,7 +282,7 @@ TilemapRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0.100000024, y: 0.100000024, z: 0}
+  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -848,6 +848,7 @@ MonoBehaviour:
   blockMovingTileMap: {fileID: 1422293390}
   collisionTileMap: {fileID: 1177831003}
   blockArrowTileMap: {fileID: 482691502}
+  arrowTileMap: {fileID: 426948147}
   arrowTilePrefab: {fileID: 173466351966743674, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
   selectedTile: {fileID: 0}
   tileLayerMask:
@@ -856,6 +857,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0}
   endPosition: {x: 0, y: 0}
   dragDistance: 1
+  upArrowSrpite: {fileID: 21300000, guid: 4639c13d52e352c4abc7bd73de26d7e0, type: 3}
+  leftArrowSrpite: {fileID: 21300000, guid: f07aa4c74e9ffbf4fb25938a5031c462, type: 3}
 --- !u!1 &1177831000
 GameObject:
   m_ObjectHideFlags: 0

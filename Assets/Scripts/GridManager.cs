@@ -9,6 +9,7 @@ public class GridManager : MonoBehaviour
     public Tilemap blockMovingTileMap;
     public Tilemap collisionTileMap;
     public Tilemap blockArrowTileMap;
+    public Tilemap arrowTileMap;
     public Tile arrowTilePrefab;
     public Tile selectedTile;
     public LayerMask tileLayerMask;
@@ -19,6 +20,9 @@ public class GridManager : MonoBehaviour
 
     public float dragDistance;
     public Coroutine moveDownwordsCoroutine;
+
+    public Sprite upArrowSrpite;
+    public Sprite leftArrowSrpite;
 
     private void OnEnable()
     {
@@ -87,6 +91,7 @@ public class GridManager : MonoBehaviour
                 selectedTile = null;
                 return;
             }
+            if (arrowTileMap.GetSprite(cellPosition) == leftArrowSrpite) return;
             selectedTile.Move(cellPosition);
             startPosition = endPosition;
         }
