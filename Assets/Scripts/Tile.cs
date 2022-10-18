@@ -10,6 +10,7 @@ public class Tile : MonoBehaviour
     {
         gridManager = GetComponentInParent<GridManager>();
     }
+
     private void Start()
     {
         StartCoroutine(AutoMove());
@@ -51,16 +52,9 @@ public class Tile : MonoBehaviour
 
     public bool IsValidMove(Vector3Int cellPosition)
     {
-        if (!gridManager.blockMovingTileMap.HasTile(cellPosition)) return false;
-        if (gridManager.collisionTileMap.HasTile(cellPosition)) return false;
-
-        for (int i = 0; i < gridManager.blockArrowTileMap.transform.childCount; i++)
-        {
-            if (gridManager.blockArrowTileMap.WorldToCell(gridManager.blockArrowTileMap.transform.GetChild(i).transform.position) == cellPosition)
-            {
-                return false;
-            }
-        }
+        if (!gridManager.CheckTile(gridManager.blockMovingTileMap, cellPosition)) return false;
+        if (gridManager.CheckTile(gridManager.collisionTileMap, cellPosition)) return false;
+        if (gridManager.CheckForGameObjectBrushTile(gridManager.blockArrowTileMap, cellPosition)) return false;
 
         return true;
     }

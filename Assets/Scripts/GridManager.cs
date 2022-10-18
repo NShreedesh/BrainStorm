@@ -100,4 +100,21 @@ public class GridManager : MonoBehaviour
         selectedTile.Move(cellPosition);
         startPosition = endPosition;
     }
+
+    public bool CheckTile(Tilemap tilemap, Vector3Int cellPosition)
+    {
+        if (!tilemap.HasTile(cellPosition)) return false;
+        return true;
+    }
+
+    public bool CheckForGameObjectBrushTile(Tilemap tilemap, Vector3Int cellPosition)
+    {
+        for (int i = 0; i < tilemap.transform.childCount; i++)
+        {
+            if (tilemap.WorldToCell(tilemap.transform.GetChild(i).transform.position) == cellPosition)
+                return true;
+        }
+
+        return false;
+    }
 }

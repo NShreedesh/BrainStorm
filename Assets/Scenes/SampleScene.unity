@@ -529,6 +529,7 @@ Transform:
   m_Children:
   - {fileID: 603607684}
   - {fileID: 1216458630}
+  - {fileID: 1012882756}
   m_Father: {fileID: 937105123}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -888,20 +889,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593e0701bfc2c63438ac11211f76c103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputController: {fileID: 96826000}
+  dragDistance: 1
   cam: {fileID: 519420031}
   blockMovingTileMap: {fileID: 1422293390}
   collisionTileMap: {fileID: 1177831003}
   blockArrowTileMap: {fileID: 482691502}
   arrowTileMap: {fileID: 426948147}
   arrowTilePrefab: {fileID: 173466351966743674, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
-  selectedTile: {fileID: 0}
   tileLayerMask:
     serializedVersion: 2
     m_Bits: 8
   upArrowSrpite: {fileID: 21300000, guid: 4639c13d52e352c4abc7bd73de26d7e0, type: 3}
   leftArrowSrpite: {fileID: 21300000, guid: f07aa4c74e9ffbf4fb25938a5031c462, type: 3}
-  inputController: {fileID: 96826000}
-  dragDistance: 1
+--- !u!4 &1012882756 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+  m_PrefabInstance: {fileID: 1067521594}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1067521594
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 482691500}
+    m_Modifications:
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173466351966743679, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
+      propertyPath: m_Name
+      value: Block Arrow Tile
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}
 --- !u!1 &1177831000
 GameObject:
   m_ObjectHideFlags: 0
