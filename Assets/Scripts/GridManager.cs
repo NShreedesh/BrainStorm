@@ -4,7 +4,16 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class GridManager : MonoBehaviour
 {
-    private Input input;
+
+    [Header("Input")]
+    [SerializeField]
+    private InputController inputController;
+
+    [Header("Inputs Values")]
+    [SerializeField]
+    private float dragDistance = 1;
+    private Vector2 startPosition;
+    private Vector2 endPosition;
 
     [Header("Camera")]
     [SerializeField]
@@ -16,34 +25,33 @@ public class GridManager : MonoBehaviour
     public Tilemap collisionTileMap;
     public Tilemap blockArrowTileMap;
     public Tilemap arrowTileMap;
+
+    [Header("Tiles")]
     public Tile arrowTilePrefab;
-    public Tile selectedTile;
     public LayerMask tileLayerMask;
+    private Tile selectedTile;
 
-    [Header("Inputs Values")]
-    [SerializeField]
-    private float dragDistance = 1;
-    private Vector2 startPosition;
-    private Vector2 endPosition;
-
-    [Header("Sprites")]
-    public Sprite upArrowSrpite;
-    public Sprite leftArrowSrpite;
+    [Header("Tile Base")]
+    public TileBase upArrowTile;
+    public TileBase leftArrowTile;
 
     private void OnEnable()
     {
-        input = new Input();
-        input.Enable();
-
-        input.Player.Click.started += OnClickStarted;
-        input.Player.Click.canceled += OnClickCanceled;
-
-        input.Player.Position.performed += OnClickPerformed;
+        inputController.OnClickStartedAction += OnClickStarted;
+        inputController.OnClickCanceledAction += OnClickCanceled;
+        inputController.OnPositionChangedAction += SwipeControl;
     }
 
-    private void OnClickStarted(CallbackContext ctx)
+    private void OnDisable()
     {
-        var worldMousePosition = cam.ScreenToWorldPoint(input.Player.Position.ReadValue<Vector2>());
+        inputController.OnClickStartedAction -= OnClickStarted;
+        inputController.OnClickCanceledAction -= OnClickCanceled;
+        inputController.OnPositionChangedAction -= SwipeControl;
+    }
+
+    private void OnClickStarted()
+    {
+        var worldMousePosition = cam.ScreenToWorldPoint(inputController.Position);
         RaycastHit2D raycastHit = Physics2D.Raycast(worldMousePosition, Vector2.zero, 10, tileLayerMask);
         if (raycastHit.collider == null) return;
 
@@ -51,21 +59,21 @@ public class GridManager : MonoBehaviour
         if (tile == null) return;
         selectedTile = tile;
 
-        startPosition = cam.ScreenToWorldPoint(input.Player.Position.ReadValue<Vector2>());
+        startPosition = cam.ScreenToWorldPoint(inputController.Position);
     }
 
-    private void OnClickCanceled(CallbackContext obj)
+    private void OnClickCanceled()
     {
         if (selectedTile == null) return;
         selectedTile = null;
     }
 
-    private void OnClickPerformed(CallbackContext ctx)
+    private void SwipeControl()
     {
-        if (!input.Player.Click.IsPressed()) return;
+        if (!inputController.IsPressed) return;
         if (selectedTile == null) return;
 
-        endPosition = cam.ScreenToWorldPoint(input.Player.Position.ReadValue<Vector2>());
+        endPosition = cam.ScreenToWorldPoint(inputController.Position);
         var draggedDistance = endPosition - startPosition;
 
         if (draggedDistance.x < -dragDistance)
@@ -76,7 +84,7 @@ public class GridManager : MonoBehaviour
         else if (draggedDistance.x > dragDistance)
         {
             var cellPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(1, 0));
-            if (arrowTileMap.GetSprite(cellPosition) == leftArrowSrpite) return;
+            if (arrowTileMap.GetSprite(cellPosition) == leftArrowTile) return;
             MoveToNextCell(cellPosition);
         }
     }
@@ -84,12 +92,29 @@ public class GridManager : MonoBehaviour
     private void MoveToNextCell(Vector3Int cellPosition)
     {
         var cellDownPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(0, -1));
-        if (!collisionTileMap.HasTile(cellDownPosition) && blockMovingTileMap.HasTile(cellDownPosition))
+        if (!CheckTile(collisionTileMap, cellDownPosition) && CheckTile(blockMovingTileMap, cellDownPosition))
         {
             selectedTile = null;
             return;
         }
         selectedTile.Move(cellPosition);
         startPosition = endPosition;
+    }
+
+    public bool CheckTile(Tilemap tilemap, Vector3Int cellPosition)
+    {
+        if (!tilemap.HasTile(cellPosition)) return false;
+        return true;
+    }
+
+    public bool CheckForGameObjectBrushTile(Tilemap tilemap, Vector3Int cellPosition)
+    {
+        for (int i = 0; i < tilemap.transform.childCount; i++)
+        {
+            if (tilemap.WorldToCell(tilemap.transform.GetChild(i).transform.position) == cellPosition)
+                return true;
+        }
+
+        return false;
     }
 }
