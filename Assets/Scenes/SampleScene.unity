@@ -900,8 +900,8 @@ MonoBehaviour:
   tileLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  upArrowSrpite: {fileID: 21300000, guid: 4639c13d52e352c4abc7bd73de26d7e0, type: 3}
-  leftArrowSrpite: {fileID: 21300000, guid: f07aa4c74e9ffbf4fb25938a5031c462, type: 3}
+  upArrowTile: {fileID: 11400000, guid: b58741100d0e7fa4796d228e8f76b85a, type: 2}
+  leftArrowTile: {fileID: 11400000, guid: 59e232130a609884aa2b2508eb8bda4d, type: 2}
 --- !u!4 &1012882756 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 173466351966743673, guid: 7b646b623e327e047ad0e15307d6a12f, type: 3}

@@ -31,9 +31,9 @@ public class GridManager : MonoBehaviour
     public LayerMask tileLayerMask;
     private Tile selectedTile;
 
-    [Header("Sprites")]
-    public Sprite upArrowSrpite;
-    public Sprite leftArrowSrpite;
+    [Header("Tile Base")]
+    public TileBase upArrowTile;
+    public TileBase leftArrowTile;
 
     private void OnEnable()
     {
@@ -84,7 +84,7 @@ public class GridManager : MonoBehaviour
         else if (draggedDistance.x > dragDistance)
         {
             var cellPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(1, 0));
-            if (arrowTileMap.GetSprite(cellPosition) == leftArrowSrpite) return;
+            if (arrowTileMap.GetSprite(cellPosition) == leftArrowTile) return;
             MoveToNextCell(cellPosition);
         }
     }

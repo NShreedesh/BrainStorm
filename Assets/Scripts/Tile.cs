@@ -27,23 +27,23 @@ public class Tile : MonoBehaviour
         while (true)
         {
             var cellPosition = gridManager.blockMovingTileMap.WorldToCell(transform.position);
-            if (gridManager.arrowTileMap.GetSprite(cellPosition) == gridManager.upArrowSrpite)
+            if (gridManager.arrowTileMap.GetTile(cellPosition) == gridManager.upArrowTile)
             {
-                Move(gridManager.blockMovingTileMap.WorldToCell(transform.position + new Vector3(0, 1)));
                 yield return new WaitForSeconds(0.3f);
+                Move(cellPosition + new Vector3Int(0, 1));
             }
-            else if (gridManager.arrowTileMap.GetSprite(cellPosition) == gridManager.leftArrowSrpite)
+            else if (gridManager.arrowTileMap.GetTile(cellPosition) == gridManager.leftArrowTile)
             {
-                Move(gridManager.blockMovingTileMap.WorldToCell(transform.position + new Vector3(-1, 0)));
                 yield return new WaitForSeconds(0.3f);
+                Move(cellPosition + new Vector3Int(-1, 0));
             }
             else
             {
-                var cellDownPosition = gridManager.blockMovingTileMap.WorldToCell(transform.position + new Vector3(0, -1));
-                if (gridManager.blockMovingTileMap.HasTile(cellDownPosition))
+                var cellDownPosition = cellPosition + new Vector3Int(0, -1);
+                if (gridManager.CheckTile(gridManager.blockMovingTileMap, cellDownPosition))
                 {
-                    Move(cellDownPosition);
                     yield return new WaitForSeconds(0.3f);
+                    Move(cellDownPosition);
                 }
             }
             yield return null;
