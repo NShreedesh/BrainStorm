@@ -4,8 +4,14 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class GridManager : MonoBehaviour
 {
-    public Camera cam;
+    private Input input;
 
+    [Header("Camera")]
+    [SerializeField]
+    private Camera cam;
+
+    [Header("TileMaps")]
+    [SerializeField]
     public Tilemap blockMovingTileMap;
     public Tilemap collisionTileMap;
     public Tilemap blockArrowTileMap;
@@ -14,13 +20,13 @@ public class GridManager : MonoBehaviour
     public Tile selectedTile;
     public LayerMask tileLayerMask;
 
-    public Input input;
-    public Vector2 startPosition;
-    public Vector2 endPosition;
+    [Header("Inputs Values")]
+    [SerializeField]
+    private float dragDistance = 1;
+    private Vector2 startPosition;
+    private Vector2 endPosition;
 
-    public float dragDistance;
-    public Coroutine moveDownwordsCoroutine;
-
+    [Header("Sprites")]
     public Sprite upArrowSrpite;
     public Sprite leftArrowSrpite;
 
@@ -35,11 +41,6 @@ public class GridManager : MonoBehaviour
         input.Player.Position.performed += OnClickPerformed;
     }
 
-    private void Start()
-    {
-        var cellPosition = blockMovingTileMap.WorldToCell(transform.position);
-    }
-
     private void OnClickStarted(CallbackContext ctx)
     {
         var worldMousePosition = cam.ScreenToWorldPoint(input.Player.Position.ReadValue<Vector2>());
@@ -48,10 +49,7 @@ public class GridManager : MonoBehaviour
 
         raycastHit.collider.TryGetComponent<Tile>(out Tile tile);
         if (tile == null) return;
-
         selectedTile = tile;
-        if (moveDownwordsCoroutine != null)
-            StopCoroutine(moveDownwordsCoroutine);
 
         startPosition = cam.ScreenToWorldPoint(input.Player.Position.ReadValue<Vector2>());
     }
@@ -73,27 +71,25 @@ public class GridManager : MonoBehaviour
         if (draggedDistance.x < -dragDistance)
         {
             var cellPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(-1, 0));
-            var cellDownPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(0, -1));
-            if (!collisionTileMap.HasTile(cellDownPosition) && blockMovingTileMap.HasTile(cellDownPosition))
-            {
-                selectedTile = null;
-                return;
-            }
-            selectedTile.Move(cellPosition);
-            startPosition = endPosition;
+            MoveToNextCell(cellPosition);
         }
         else if (draggedDistance.x > dragDistance)
         {
             var cellPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(1, 0));
-            var cellDownPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(0, -1));
-            if (!collisionTileMap.HasTile(cellDownPosition) && blockMovingTileMap.HasTile(cellDownPosition))
-            {
-                selectedTile = null;
-                return;
-            }
             if (arrowTileMap.GetSprite(cellPosition) == leftArrowSrpite) return;
-            selectedTile.Move(cellPosition);
-            startPosition = endPosition;
+            MoveToNextCell(cellPosition);
         }
+    }
+
+    private void MoveToNextCell(Vector3Int cellPosition)
+    {
+        var cellDownPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(0, -1));
+        if (!collisionTileMap.HasTile(cellDownPosition) && blockMovingTileMap.HasTile(cellDownPosition))
+        {
+            selectedTile = null;
+            return;
+        }
+        selectedTile.Move(cellPosition);
+        startPosition = endPosition;
     }
 }

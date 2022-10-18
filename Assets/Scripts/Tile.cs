@@ -12,7 +12,7 @@ public class Tile : MonoBehaviour
     }
     private void Start()
     {
-        StartCoroutine(MoveDownward());
+        StartCoroutine(AutoMove());
     }
 
     public void Move(Vector3Int cellPosition)
@@ -21,20 +21,20 @@ public class Tile : MonoBehaviour
         transform.position = cellPosition + new Vector3(0.5f, 0.5f);
     }
 
-    public IEnumerator MoveDownward()
+    public IEnumerator AutoMove()
     {
         while (true)
         {
             var cellPosition = gridManager.blockMovingTileMap.WorldToCell(transform.position);
             if (gridManager.arrowTileMap.GetSprite(cellPosition) == gridManager.upArrowSrpite)
             {
-                yield return new WaitForSeconds(0.3f);
                 Move(gridManager.blockMovingTileMap.WorldToCell(transform.position + new Vector3(0, 1)));
+                yield return new WaitForSeconds(0.3f);
             }
             else if (gridManager.arrowTileMap.GetSprite(cellPosition) == gridManager.leftArrowSrpite)
             {
-                yield return new WaitForSeconds(0.3f);
                 Move(gridManager.blockMovingTileMap.WorldToCell(transform.position + new Vector3(-1, 0)));
+                yield return new WaitForSeconds(0.3f);
             }
             else
             {
