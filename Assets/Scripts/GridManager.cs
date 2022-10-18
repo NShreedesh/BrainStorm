@@ -4,8 +4,6 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class GridManager : MonoBehaviour
 {
-    private Input input;
-
     [Header("Camera")]
     [SerializeField]
     private Camera cam;
@@ -20,30 +18,36 @@ public class GridManager : MonoBehaviour
     public Tile selectedTile;
     public LayerMask tileLayerMask;
 
+    [Header("Sprites")]
+    public Sprite upArrowSrpite;
+    public Sprite leftArrowSrpite;
+
+    [Header("Input")]
+    [SerializeField]
+    private InputController inputController;
+
     [Header("Inputs Values")]
     [SerializeField]
     private float dragDistance = 1;
     private Vector2 startPosition;
     private Vector2 endPosition;
 
-    [Header("Sprites")]
-    public Sprite upArrowSrpite;
-    public Sprite leftArrowSrpite;
-
     private void OnEnable()
     {
-        input = new Input();
-        input.Enable();
-
-        input.Player.Click.started += OnClickStarted;
-        input.Player.Click.canceled += OnClickCanceled;
-
-        input.Player.Position.performed += OnClickPerformed;
+        inputController.OnClickStartedAction += OnClickStarted;
+        inputController.OnClickPerformedAction += OnClickPerformed;
+        inputController.OnClickCanceledAction += OnClickCanceled;
+    }
+    private void OnDisable()
+    {
+        inputController.OnClickStartedAction -= OnClickStarted;
+        inputController.OnClickPerformedAction -= OnClickPerformed;
+        inputController.OnClickCanceledAction -= OnClickCanceled;
     }
 
-    private void OnClickStarted(CallbackContext ctx)
+    private void OnClickStarted()
     {
-        var worldMousePosition = cam.ScreenToWorldPoint(input.Player.Position.ReadValue<Vector2>());
+        var worldMousePosition = cam.ScreenToWorldPoint(inputController.Position);
         RaycastHit2D raycastHit = Physics2D.Raycast(worldMousePosition, Vector2.zero, 10, tileLayerMask);
         if (raycastHit.collider == null) return;
 
@@ -51,21 +55,21 @@ public class GridManager : MonoBehaviour
         if (tile == null) return;
         selectedTile = tile;
 
-        startPosition = cam.ScreenToWorldPoint(input.Player.Position.ReadValue<Vector2>());
+        startPosition = cam.ScreenToWorldPoint(inputController.Position);
     }
 
-    private void OnClickCanceled(CallbackContext obj)
+    private void OnClickCanceled()
     {
         if (selectedTile == null) return;
         selectedTile = null;
     }
 
-    private void OnClickPerformed(CallbackContext ctx)
+    private void OnClickPerformed()
     {
-        if (!input.Player.Click.IsPressed()) return;
+        if (!inputController.IsPressed) return;
         if (selectedTile == null) return;
 
-        endPosition = cam.ScreenToWorldPoint(input.Player.Position.ReadValue<Vector2>());
+        endPosition = cam.ScreenToWorldPoint(inputController.Position);
         var draggedDistance = endPosition - startPosition;
 
         if (draggedDistance.x < -dragDistance)
