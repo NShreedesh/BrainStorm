@@ -92,7 +92,7 @@ public class GridManager : MonoBehaviour
     private void MoveToNextCell(Vector3Int cellPosition)
     {
         var cellDownPosition = blockMovingTileMap.WorldToCell(selectedTile.transform.position + new Vector3(0, -1));
-        if (!collisionTileMap.HasTile(cellDownPosition) && blockMovingTileMap.HasTile(cellDownPosition))
+        if (!CheckTile(collisionTileMap, cellDownPosition) && CheckTile(blockMovingTileMap, cellDownPosition))
         {
             selectedTile = null;
             return;
